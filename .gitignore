@@ -1,4 +1,5 @@
 build
-libparsing.a
+libparser.a
 main.cpp
 compile_flags.txt
+a.out
