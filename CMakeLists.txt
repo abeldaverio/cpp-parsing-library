@@ -4,8 +4,11 @@ set(CMAKE_CXX_STANDARD 23)
 set(LIB_NAME parser)
 
 add_library(${LIB_NAME} STATIC
-    src/BaseTypes.cpp
+    src/BaseTypes/BaseTypes.cpp
+    src/BaseTypes/Number.cpp
     src/Rest.cpp
+    src/Utils.cpp
+    src/JsonParser/JsonParser.cpp
 )
 
 target_include_directories(${LIB_NAME}

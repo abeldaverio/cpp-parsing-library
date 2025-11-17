@@ -3,7 +3,10 @@
 #include "Parser.hpp"
 #include "ParserTypes.hpp"
 #include "Rest.hpp"
+#include "BaseTypes.hpp"
 #include <any>
+#include <format>
+#include <vector>
 
 template<typename T>
 Parser<T> pure(T value) {
@@ -53,8 +56,53 @@ Parser<std::invoke_result_t<F, typename Parsers::value_type...>> apply(F&& f, Pa
 }
 
 template<typename T>
-Parser<T> parsingError(std::string const &err) {
-    return Parser<T>([err](Rest r) {
-       return Error(err, r);
+Parser<T> parsingError(std::string const &err, bool fatal = false) {
+    return Parser<T>([err, fatal](Rest r) {
+       return Error(err, r, fatal);
     });
 }
+
+template<typename T>
+Parser<T> parsingContext(std::string const &context, bool fatal = false) {
+    return Parser<T>([context, fatal](Rest r) {
+        Error err("", r, fatal);
+        err.context = context;
+        return err;
+    });
+}
+
+
+#define PCAST(p, type) (apply([](auto v) {return (type)(v);}, p))
+
+template<typename T>
+Parser<std::vector<T>> parseMultipleWithSeparator(Parser<T> p, char sep) {
+    return apply([](T first, std::vector<T> rest) {
+        rest.insert(rest.begin(), first);
+        return rest;
+    }, p, ((parseChar(sep) ||
+            parsingError<char>(std::format("Error parsing multiple elements: missing char \"{}\"", sep)))
+            >> p).many()) ||
+        pure(std::vector<T>());
+}
+
+template<typename T, typename ...Args>
+Parser<T> lazy(std::function<Parser<T> (Args...)> f, Args... args) {
+    return Parser<T>([=](Rest r) {
+        return f(args...)(r);
+    });
+}
+
+template<typename F>
+auto lazy(F f) {
+    using ParserType = decltype(f());
+    using ValueType = typename ParserType::value_type;
+
+    return Parser<ValueType>(
+        [f](Rest r) {
+            return f()(r);
+        }
+    );
+}
+
+Parser<std::string> parseUntil(char c);
+Parser<std::string> parseBetween(char c);

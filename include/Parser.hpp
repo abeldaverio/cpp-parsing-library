@@ -29,6 +29,45 @@ class Parser {
         });
     }
 
+    Parser<T> operator>=(Parser<T> const &other) {
+        return Parser<T>(
+            [self = *this, other](Rest r) -> Result<T> {
+            Result<T> first = self(r);
+
+            if (first.index() == SUCCESS) {
+                return first;
+            }
+            Result<T> second = other(r);
+
+            if (second.index() == SUCCESS) {
+                return second;
+            }
+            Error const &eFirst = std::get<ERROR>(first);
+            Error const &eSecond = std::get<ERROR>(second);
+            return Error(eSecond.message, eSecond.rest, eFirst.fatal | eSecond.fatal, eFirst.context);
+        });
+    }
+
+    Parser<T> operator<=(Parser<T> const &other) {
+        return Parser<T>(
+            [self = *this, other](Rest r) -> Result<T> {
+            Result<T> second = other(r);
+
+            if (second.index() == SUCCESS) {
+                return second;
+            }
+            Result<T> first = self(r);
+
+            if (first.index() == SUCCESS) {
+                return first;
+            }
+
+            Error const &eFirst = std::get<ERROR>(first);
+            Error const &eSecond = std::get<ERROR>(second);
+            return Error(eFirst.message, eFirst.rest, eFirst.fatal | eSecond.fatal, eSecond.context);
+        });
+    }
+
     template<typename O>
     Parser<O> operator>>(Parser<O> const real) {
         return Parser<O>([self = *this, real](Rest r) -> Result<O> {
@@ -67,6 +106,9 @@ class Parser {
                 result.push_back(std::get<SUCCESS>(step).value);
                 rest = std::get<SUCCESS>(step).rest;
                 step = self(rest);
+            }
+            if (std::get<Error>(step).fatal) {
+                return std::get<Error>(step);
             }
             return Success<std::vector<T>>{std::move(result), rest};
         });
@@ -112,6 +154,6 @@ std::ostream &operator<<(std::ostream &os, Result<T> const &obj) {
         );
     } catch (const std::bad_variant_access &) {
         Error err = std::get<ERROR>(obj);
-        return os << "at line " << err.lines << " column " << err.columns << ": " << err.message;
+        return os << "at line " << err.rest.lines << " column " << err.rest.columns << ": " << err.message;
     }
 }

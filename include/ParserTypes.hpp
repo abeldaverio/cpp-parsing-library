@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Rest.hpp"
+#include <ostream>
 #include <string>
 #include <variant>
 
@@ -18,13 +19,16 @@ struct MultipleSuccess {
 };
 
 struct Error {
-    Error() = default;
-    Error(std::string const &m, Rest r, bool f = false): message(m), columns(r.columns), lines(r.lines), fatal(f) {}
+    Error(std::string const &m, Rest r, bool f = false, std::string const &context = "")
+        : message(m), context(context), rest(r), fatal(f) {}
+    std::string context;
     std::string message;
-    std::size_t columns;
-    std::size_t lines;
+    Rest rest;
     bool fatal;
 };
+
+void printError(Error const &error, std::string const &base, std::string const &filename = "");
+std::ostream &operator<<(std::ostream &os, Error const &err);
 
 template<typename T>
 using Result = std::variant<Success<T>, Error>;
