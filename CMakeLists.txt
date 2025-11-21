@@ -14,6 +14,6 @@ add_library(${LIB_NAME} STATIC
 )
 
 target_include_directories(${LIB_NAME}
-    PRIVATE
+    PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
