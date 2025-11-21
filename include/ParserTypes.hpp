@@ -21,8 +21,8 @@ struct MultipleSuccess {
 struct Error {
     Error(std::string const &m, Rest r, bool f = false, std::string const &context = "")
         : message(m), context(context), rest(r), fatal(f) {}
-    std::string context;
     std::string message;
+    std::string context;
     Rest rest;
     bool fatal;
 };
