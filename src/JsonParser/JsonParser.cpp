@@ -35,8 +35,8 @@ Parser<JsonArray> parseJsonArray() {
 
 Parser<JsonValue> parseJsonValue() {
     return apply([](JsonVariant v) -> JsonValue {return {v};},
-        variant(parseInt()) ||
         variant(parseDouble()) ||
+        variant(parseInt()) ||
         variant(parseBetween('"')) ||
         variant(parseJsonBool()) ||
         variant(lazy(parseJsonArray)) ||
