@@ -27,7 +27,7 @@ std::ostream &operator<<(std::ostream &os, Error const &err) {
 }
 
 static std::string::size_type getIndex(std::string const &base, char needle, int occurence) {
-    int i = 0;
+    long unsigned int i = 0;
     for (; (i < base.size()) || (occurence != 0); i++) {
         if (base[i] == needle) {
             occurence--;
@@ -37,8 +37,8 @@ static std::string::size_type getIndex(std::string const &base, char needle, int
 }
 
 static std::string getLineFromBase(std::size_t line, std::string const base) {
-    int start = 0;
-    int end = 0;
+    long unsigned int start = 0;
+    long unsigned int end = 0;
 
     while (line > 0 && start < base.size()) {
         if (base[start] == '\n') {
