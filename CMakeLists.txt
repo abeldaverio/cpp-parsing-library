@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+project(parser)
+
 set(CMAKE_CXX_STANDARD 23)
 set(LIB_NAME parser)
 
@@ -13,5 +15,5 @@ add_library(${LIB_NAME} STATIC
 
 target_include_directories(${LIB_NAME}
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
