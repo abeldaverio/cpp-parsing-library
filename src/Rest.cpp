@@ -26,16 +26,6 @@ std::ostream &operator<<(std::ostream &os, Error const &err) {
     return os << std::format("At line {} and col {}:\n\t{}: {}", err.rest.lines, err.rest.columns, err.context, err.message);
 }
 
-static std::string::size_type getIndex(std::string const &base, char needle, int occurence) {
-    long unsigned int i = 0;
-    for (; (i < base.size()) || (occurence != 0); i++) {
-        if (base[i] == needle) {
-            occurence--;
-        }
-    }
-    return i;
-}
-
 static std::string getLineFromBase(std::size_t line, std::string const base) {
     long unsigned int start = 0;
     long unsigned int end = 0;
