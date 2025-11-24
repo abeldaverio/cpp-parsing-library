@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(parser)
 
-set(CC clang)
+set(CXX "/usr/bin/clang++")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(LIB_NAME parser)
