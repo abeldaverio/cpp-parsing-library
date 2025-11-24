@@ -117,7 +117,7 @@ class Parser {
     template<typename O>
     Parser<O> operator>>=(std::function<Parser<O> (T)> func) {
         return Parser<O>([self = *this, func](Rest rest) -> Result<O> {
-            Result<T> fst = self;
+            Result<T> fst = self(rest);
             if (fst.index() == ERROR) {
                 return std::get<ERROR>(fst);
             } else {
