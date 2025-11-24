@@ -41,14 +41,14 @@ Parser<JsonValue> parseJsonValue() {
         variant(parseJsonBool()) ||
         variant(lazy(parseJsonArray)) ||
         variant(lazy(parseJsonObject)) ||
-        parsingError<JsonVariant>("unknow value", true)
+        parsingError<JsonVariant>("unknow value")
     );
 }
 
 Parser<std::pair<std::string, JsonValue>> parseJsonLine() {
     return apply([](std::string k, JsonValue v){return std::make_pair(k, v);},
-        jsonSkip() >> (parseBetween('"') || parsingError<std::string>("Error parsing json key", true)) << jsonSkip() << parseChar(':'),
-        jsonSkip() >> (parsingContext<JsonValue>("Parsing json value") >= parseJsonValue()) << jsonSkip()
+        jsonSkip() >> (parseBetween('"') || parsingError<std::string>("Error parsing json key")) << jsonSkip() << parseChar(':'),
+        jsonSkip() >> (parsingContext<JsonValue>("Parsing json value", true) >= parseJsonValue()) << jsonSkip()
     );
 }
 
