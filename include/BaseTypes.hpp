@@ -2,6 +2,7 @@
 #include "Parser.hpp"
 
 Parser<char> parseChar(char c);
+Parser<char> parseAnyChar();
 Parser<char> parseNotChar(char c);
 Parser<char> parseCharFromList(std::string const &list);
 Parser<std::string> parserToString(Parser<std::vector<char>> p);
@@ -18,3 +19,4 @@ Parser<unsigned int> parseUnsignedInt();
 Parser<long int> parseLongInt();
 Parser<int> parseInt();
 Parser<double> parseDouble();
+Parser<char> parseCharNotString(std::string const str);

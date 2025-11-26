@@ -3,11 +3,18 @@
 #include "Parser.hpp"
 #include "ParserUtils.hpp"
 #include <map>
+#include <string>
 #include <utility>
 #include <vector>
 
-Parser<std::string> jsonSkip() {
-    return parserToString(parseCharFromList("\t\n ").many());
+Parser<std::string> parseJsonComment() {
+    return
+        (parseString("//") >> parseUntil('\n')) ||
+        (parseBetweenString("/*", "*/"));
+}
+
+Parser<std::vector<std::string>> jsonSkip() {
+    return (parseJsonComment() || parserToString((parseCharFromList("\t\n ")).some())).many();
 }
 
 template<typename T>

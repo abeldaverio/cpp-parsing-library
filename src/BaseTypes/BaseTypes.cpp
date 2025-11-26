@@ -41,6 +41,18 @@ Parser<char> parseNotChar(char c) {
     });
 }
 
+Parser<char> parseAnyChar() {
+    return Parser<char>([](Rest rest) -> Result<char> {
+       if (rest.rest.empty()) {
+           return Error(
+               std::format("Error parsing any char, string empty"),
+               rest
+           );
+       }
+       return Success<char>{*rest.rest.begin(), rest.update()};
+    });
+}
+
 Parser<char> parseCharFromList(std::string const &list) {
     return Parser<char>([list](Rest rest) -> Result<char> {
        if (rest.rest.empty()) {
@@ -79,5 +91,14 @@ Parser<std::string> parseString(std::string const &str) {
             rest.update();
         }
         return Success<std::string>(str, rest);
+    });
+}
+
+Parser<char> parseCharNotString(std::string const str) {
+    return Parser<char>([str](Rest rest) -> Result<char> {
+        if (rest.rest.starts_with(str)) {
+            return Error(std::format("error parsing char \"{}\", string \"{}\" found", rest.rest[0], str), rest);
+        }
+        return parseAnyChar()(rest);
     });
 }

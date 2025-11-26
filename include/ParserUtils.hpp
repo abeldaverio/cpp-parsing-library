@@ -6,6 +6,7 @@
 #include "BaseTypes.hpp"
 #include <any>
 #include <format>
+#include <optional>
 #include <vector>
 
 template<typename T>
@@ -105,4 +106,6 @@ auto lazy(F f) {
 }
 
 Parser<std::string> parseUntil(char c);
-Parser<std::string> parseBetween(char c);
+Parser<std::string> parseBetween(char c, char c2 = -1);
+Parser<std::string> parseUntilString(std::string const &str);
+Parser<std::string> parseBetweenString(std::string const &str, std::optional<std::string> = std::nullopt);

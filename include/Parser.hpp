@@ -97,6 +97,19 @@ class Parser {
         });
     }
 
+    template<typename O>
+    Parser<O> operator,(Parser<O> const real) {
+        return Parser<O>([self = *this, real](Rest r) -> Result<O> {
+            Result<T> f = self(r);
+
+            if (f.index() == ERROR) {
+                return real(r);
+            } else {
+                return real(std::get<SUCCESS>(f).rest);
+            }
+        });
+    }
+
     Parser<std::vector<T>> many() const {
         return Parser<std::vector<T>>([self = *this](Rest rest) -> Result<std::vector<T>> {
             std::vector<T> result;
