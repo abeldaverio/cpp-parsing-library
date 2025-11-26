@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-Rest::Rest(std::string const &str): lines(0), columns(0), rest(str) {}
+Rest::Rest(std::string const &str): lines(1), columns(1), rest(str) {}
 
 
 Rest Rest::update() {
@@ -13,7 +13,7 @@ Rest Rest::update() {
         return *this;
     }
     if (this->rest.starts_with('\n')) {
-        this->columns = 0;
+        this->columns = 1;
         this->lines++;
     } else {
         this->columns++;
