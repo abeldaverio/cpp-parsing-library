@@ -69,9 +69,9 @@ Parser<JsonObject> parseJsonRoot() {
 }
 
 Parser<JsonObject> parseJsonObject() {
-    return (parsingContext<JsonObject>("Parsing json object") >= (
+    return (parsingContext<JsonObject>("Parsing json object") >= ( jsonSkip() >>
         parseChar('{') >>
              (parsingContext<JsonObject>("Parsing json object", true) >= parseJsonRoot()))
-        << (parseChar('}') || parsingError<char>("Missing char end of object \"}\"", true))
+        << (parseChar('}') || parsingError<char>("Missing char end of object \"}\"", true)) << jsonSkip()
     );
 }

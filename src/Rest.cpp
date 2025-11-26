@@ -7,7 +7,6 @@
 
 Rest::Rest(std::string const &str): lines(1), columns(1), rest(str) {}
 
-
 Rest Rest::update() {
     if (this->rest.empty()) {
         return *this;
@@ -27,8 +26,8 @@ std::ostream &operator<<(std::ostream &os, Error const &err) {
 }
 
 static std::string getLineFromBase(std::size_t line, std::string const base) {
-    long unsigned int start = 0;
-    long unsigned int end = 0;
+    long unsigned int start = 1;
+    long unsigned int end = 1;
 
     while (line > 0 && start < base.size()) {
         if (base[start] == '\n') {
