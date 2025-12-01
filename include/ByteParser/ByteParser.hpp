@@ -10,14 +10,16 @@
 #include <sys/types.h>
 #include <vector>
 
-template <typename Type> Parser<Type> parseByte(std::endian endian = std::endian::big) {
-  return apply([endian](std::vector<char> v) {
-      if (std::endian::native != endian) {
+template <typename Type>
+Parser<Type> parseByte(std::endian endian = std::endian::big) {
+  return apply(
+      [endian](std::vector<char> v) {
+        if (std::endian::native != endian) {
           std::reverse(v.begin(), v.end());
-      }
-      return *(Type *)v.data();
-  },
-               parseAnyChar() * sizeof(Type));
+        }
+        return *(Type *)v.data();
+      },
+      parseAnyChar() * sizeof(Type));
 }
 
 template <typename Type>

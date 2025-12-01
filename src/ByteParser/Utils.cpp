@@ -4,5 +4,5 @@
 #include <string>
 
 Parser<std::string> parseByteString() {
-    return parserToString(parseByteArray(parseAnyChar()));
+  return parserToString(parseByteArray(parseAnyChar()));
 }
