@@ -127,6 +127,23 @@ class Parser {
         });
     }
 
+    Parser<std::vector<T>> operator*(std::size_t nb) const {
+        return Parser<std::vector<T>>([self = *this, nb](Rest rest) -> Result<std::vector<T>> {
+            std::vector<T> result;
+
+            for (std::size_t i = 0; i < nb; i++) {
+                Result<T> step = self(rest);
+                if (step.index() == ERROR) {
+                    return std::get<ERROR>(step);
+                }
+                result.push_back(std::get<SUCCESS>(step).value);
+                rest = std::get<SUCCESS>(step).rest;
+            }
+            return Success<std::vector<T>>{std::move(result), rest};
+        });
+    }
+
+
     template<typename O>
     Parser<O> operator>>=(std::function<Parser<O> (T)> func) {
         return Parser<O>([self = *this, func](Rest rest) -> Result<O> {

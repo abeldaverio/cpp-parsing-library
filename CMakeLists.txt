@@ -13,6 +13,7 @@ add_library(${LIB_NAME} STATIC
     src/Rest.cpp
     src/Utils.cpp
     src/JsonParser/JsonParser.cpp
+    src/ByteParser/Utils.cpp
 )
 
 target_include_directories(${LIB_NAME}
