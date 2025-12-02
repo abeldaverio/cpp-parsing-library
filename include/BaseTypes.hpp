@@ -18,5 +18,6 @@ Parser<long unsigned int> parseLongUnsignedInt();
 Parser<unsigned int> parseUnsignedInt();
 Parser<long int> parseLongInt();
 Parser<int> parseInt();
+Parser<double> parseUnsignedDouble();
 Parser<double> parseDouble();
 Parser<char> parseCharNotString(std::string const str);
