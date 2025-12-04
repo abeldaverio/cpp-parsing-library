@@ -4,8 +4,11 @@
 #include <format>
 #include <iostream>
 #include <string>
+#include <vector>
 
 Rest::Rest(std::string const &str): lines(1), columns(1), rest(str) {}
+Rest::Rest(std::vector<char> const &v): lines(1), columns(1), rest(v.begin(), v.end()) {}
+Rest::Rest(std::vector<unsigned char> const &v): lines(1), columns(1), rest(v.begin(), v.end()) {}
 
 Rest Rest::update() {
     if (this->rest.empty()) {
