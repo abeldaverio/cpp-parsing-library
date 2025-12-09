@@ -4,6 +4,7 @@
 #include "ParserUtils.hpp"
 #include <map>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -62,7 +63,7 @@ Parser<std::pair<std::string, JsonValue>> parseJsonLine() {
 Parser<JsonObject> parseJsonRoot() {
     return apply(
         [](std::vector<std::pair<std::string, JsonValue>> vect) {
-            return std::map<std::string, JsonValue>(vect.begin(), vect.end());
+            return std::unordered_map<std::string, JsonValue>(vect.begin(), vect.end());
         },
         parseMultipleWithSeparator(parseJsonLine(), ',')
     );

@@ -3,6 +3,7 @@
 #include "Parser.hpp"
 #include <map>
 #include <string>
+#include <unordered_map>
 #include <variant>
 #include <vector>
 
@@ -10,7 +11,7 @@
 struct JsonValue;
 
 using JsonArray  = std::vector<JsonValue>;
-using JsonObject = std::map<std::string, JsonValue>;
+using JsonObject = std::unordered_map<std::string, JsonValue>;
 
 using JsonVariant = std::variant<
     int,
