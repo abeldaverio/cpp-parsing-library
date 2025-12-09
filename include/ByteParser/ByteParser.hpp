@@ -51,4 +51,16 @@ Parser<std::unordered_map<Key, Value>> parseByteMap(Parser<Key> k,
                 k, v)));
 }
 
+template <typename Type>
+Parser<std::optional<Type>> parseByteOptional(Parser<Type> p) {
+  return parseByte<bool>() >>=
+         std::function<Parser<std::optional<Type>>(bool)>(
+             [p](bool exist) {
+              if (exist) {
+                return apply([](Type const &t) {return std::optional(t);}, p);
+              }
+              return pure<std::optional<Type>>(std::nullopt);
+            });
+}
+
 Parser<std::string> parseByteString();
