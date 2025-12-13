@@ -16,6 +16,7 @@ using JsonVariant =
     std::variant<int, double, std::string, bool, JsonObject, JsonArray>;
 
 struct JsonValue {
+  JsonValue() = default;
   JsonValue(JsonVariant const v) : value(v) {}
   JsonValue(int v) : value(v) {}
   JsonValue(double v) : value(v) {}
