@@ -43,5 +43,5 @@ Parser<JsonValue> parseByteJsonValue() {
 }
 
 Parser<JsonObject> parseByteJsonObject() {
-  return parseByteMap(parseByteString(), parseJsonValue());
+  return parseByteMap(parseByteString(), parseByteJsonValue());
 }
