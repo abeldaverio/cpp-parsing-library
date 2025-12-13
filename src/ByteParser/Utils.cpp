@@ -36,7 +36,7 @@ static const std::array<std::function<Parser<JsonValue>()>, 6> json_value_map =
         },
 };
 
-Parser<JsonValue> parseJsonValue() {
+Parser<JsonValue> parseByteJsonValue() {
   return parseByte<std::uint8_t>() >>=
          std::function<Parser<JsonValue>(std::uint8_t)>(
              [](std::uint8_t i) { return json_value_map[i](); });

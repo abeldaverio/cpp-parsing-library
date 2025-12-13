@@ -65,5 +65,5 @@ Parser<std::optional<Type>> parseByteOptional(Parser<Type> p) {
 }
 
 Parser<std::string> parseByteString();
-Parser<JsonValue> parseJsonValue();
+Parser<JsonValue> parseByteJsonValue();
 Parser<JsonObject> parseByteJsonObject();
