@@ -3,6 +3,7 @@
 #include "BaseTypes.hpp"
 #include "Parser.hpp"
 #include "ParserUtils.hpp"
+#include "Json/JsonParser.hpp"
 #include <algorithm>
 #include <bit>
 #include <functional>
@@ -64,3 +65,5 @@ Parser<std::optional<Type>> parseByteOptional(Parser<Type> p) {
 }
 
 Parser<std::string> parseByteString();
+Parser<JsonValue> parseJsonValue();
+Parser<JsonObject> parseByteJsonObject();
