@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <bit>
+#include <cstdint>
 #include <functional>
 #include <unordered_map>
 #include <utility>
@@ -32,8 +33,8 @@ Parser<Type> parseByte(std::endian endian = std::endian::big)
 template<typename Type>
 Parser<std::vector<Type>> parseByteArray(Parser<Type> p)
 {
-  return parseByte<u_int32_t>() >>=
-      std::function<Parser<std::vector<Type>>(u_int32_t)>([p](u_int32_t nb)
+  return parseByte<std::uint32_t>() >>=
+      std::function<Parser<std::vector<Type>>(std::uint32_t)>([p](std::uint32_t nb)
                                                           { return p * nb; });
 }
 

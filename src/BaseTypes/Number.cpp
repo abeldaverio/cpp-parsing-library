@@ -2,6 +2,7 @@
 #include "Parser.hpp"
 #include "ParserUtils.hpp"
 #include <cctype>
+#include <cstdint>
 #include <string>
 
 Parser<char> parseDigit() { return parseCharFromList("0123456789"); }
@@ -19,39 +20,39 @@ Parser<std::string> parseStringDigitBase(std::string const &base) {
   return parserToString(p.some());
 }
 
-Parser<long unsigned int> parseUnsignedIntBase(std::string const &base) {
+Parser<std::uint64_t> parseUnsignedIntBase(std::string const &base) {
   return apply(
       [base](std::string str) { return std::stoul(str, 0, base.size()); },
       parseStringDigitBase(base));
 }
 
-Parser<long unsigned int> parseUnsignedHexa() {
+Parser<std::uint64_t> parseUnsignedHexa() {
   return parseChar('0') >> ParseCharAndLower('X') >>
          parseUnsignedIntBase("0123456789ABCDEF");
 }
 
-Parser<long unsigned int> parseUnsignedOctal() {
+Parser<std::uint64_t> parseUnsignedOctal() {
   return parseChar('0') >> parseUnsignedIntBase("01234567");
 }
 
-Parser<long unsigned int> parseUnsignedBinary() {
+Parser<std::uint64_t> parseUnsignedBinary() {
   return parseChar('0') >> ParseCharAndLower('B') >> parseUnsignedIntBase("01");
 }
 
-Parser<long unsigned int> parseLongUnsignedInt() {
+Parser<std::uint64_t> parseLongUnsignedInt() {
   return parseUnsignedHexa() || parseUnsignedBinary() || parseUnsignedOctal() ||
          parseUnsignedIntBase("0123456789");
 }
 
-Parser<unsigned int> parseUnsignedInt() {
-  return PCAST(parseLongUnsignedInt(), unsigned int);
+Parser<std::uint32_t> parseUnsignedInt() {
+  return PCAST(parseLongUnsignedInt(), std::uint32_t);
 }
 
-Parser<long int> parseLongInt() {
+Parser<std::int64_t> parseLongInt() {
   return (parseChar('-') >>
-          apply([](long unsigned int i) { return -(long int)i; },
+          apply([](std::uint64_t i) { return -(std::int64_t)i; },
                 parseUnsignedInt())) ||
-         PCAST(parseLongUnsignedInt(), long int);
+         PCAST(parseLongUnsignedInt(), std::int64_t);
 }
 
 Parser<int> parseInt() { return PCAST(parseLongInt(), int); }

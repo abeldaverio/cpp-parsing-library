@@ -1,6 +1,7 @@
 #include "Rest.hpp"
 #include "ParserTypes.hpp"
 #include <cstddef>
+#include <cstdint>
 #include <format>
 #include <iostream>
 #include <string>
@@ -29,8 +30,8 @@ std::ostream &operator<<(std::ostream &os, Error const &err) {
 }
 
 static std::string getLineFromBase(std::size_t line, std::string const base) {
-    long unsigned int start = 1;
-    long unsigned int end = 1;
+    std::uint64_t start = 1;
+    std::uint64_t end = 1;
 
     while (line > 0 && start < base.size()) {
         if (base[start] == '\n') {
