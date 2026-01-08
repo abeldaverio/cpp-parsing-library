@@ -22,7 +22,7 @@ class Parser {
             [self = *this, other](Rest r) {
             Result<T> first = self(r);
 
-            if (first.index() == SUCCESS || std::get<ERROR>(first).fatal) {
+            if (first.index() == SUCCESS || std::get<ERR>(first).fatal) {
                 return first;
             }
             return other(r);
@@ -42,8 +42,8 @@ class Parser {
             if (second.index() == SUCCESS) {
                 return second;
             }
-            Error const &eFirst = std::get<ERROR>(first);
-            Error const &eSecond = std::get<ERROR>(second);
+            Error const &eFirst = std::get<ERR>(first);
+            Error const &eSecond = std::get<ERR>(second);
             return Error(eSecond.message, eSecond.rest, eFirst.fatal | eSecond.fatal, eFirst.context);
         });
     }
@@ -62,8 +62,8 @@ class Parser {
                 return first;
             }
 
-            Error const &eFirst = std::get<ERROR>(first);
-            Error const &eSecond = std::get<ERROR>(second);
+            Error const &eFirst = std::get<ERR>(first);
+            Error const &eSecond = std::get<ERR>(second);
             return Error(eFirst.message, eFirst.rest, eFirst.fatal | eSecond.fatal, eSecond.context);
         });
     }
@@ -73,8 +73,8 @@ class Parser {
         return Parser<O>([self = *this, real](Rest r) -> Result<O> {
             Result<T> f = self(r);
 
-            if (f.index() == ERROR) {
-                return std::get<ERROR>(f);
+            if (f.index() == ERR) {
+                return std::get<ERR>(f);
             } else {
                 return real(std::get<SUCCESS>(f).rest);
             }
@@ -86,12 +86,12 @@ class Parser {
         return Parser<T>([self = *this, other](Rest r) -> Result<T> {
             Result<T> f = self(r);
 
-            if (f.index() == ERROR) {
-                return std::get<ERROR>(f);
+            if (f.index() == ERR) {
+                return std::get<ERR>(f);
             }
             Result<O> o = other(std::get<SUCCESS>(f).rest);
-            if (o.index() == ERROR) {
-                return std::get<ERROR>(o);
+            if (o.index() == ERR) {
+                return std::get<ERR>(o);
             }
             return Success<T>{std::get<SUCCESS>(f).value, std::get<SUCCESS>(o).rest};
         });
@@ -102,7 +102,7 @@ class Parser {
         return Parser<O>([self = *this, real](Rest r) -> Result<O> {
             Result<T> f = self(r);
 
-            if (f.index() == ERROR) {
+            if (f.index() == ERR) {
                 return real(r);
             } else {
                 return real(std::get<SUCCESS>(f).rest);
@@ -133,8 +133,8 @@ class Parser {
 
             for (std::size_t i = 0; i < nb; i++) {
                 Result<T> step = self(rest);
-                if (step.index() == ERROR) {
-                    return std::get<ERROR>(step);
+                if (step.index() == ERR) {
+                    return std::get<ERR>(step);
                 }
                 result.push_back(std::get<SUCCESS>(step).value);
                 rest = std::get<SUCCESS>(step).rest;
@@ -148,8 +148,8 @@ class Parser {
     Parser<O> operator>>=(std::function<Parser<O> (T)> func) {
         return Parser<O>([self = *this, func](Rest rest) -> Result<O> {
             Result<T> fst = self(rest);
-            if (fst.index() == ERROR) {
-                return std::get<ERROR>(fst);
+            if (fst.index() == ERR) {
+                return std::get<ERR>(fst);
             } else {
                 return func(std::get<SUCCESS>(fst).value)(std::get<SUCCESS>(fst).rest);
             }
@@ -183,7 +183,7 @@ std::ostream &operator<<(std::ostream &os, Result<T> const &obj) {
         << ")"
         );
     } catch (const std::bad_variant_access &) {
-        Error err = std::get<ERROR>(obj);
+        Error err = std::get<ERR>(obj);
         return os << "at line " << err.rest.lines << " column " << err.rest.columns << ": " << err.message;
     }
 }

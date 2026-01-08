@@ -25,8 +25,8 @@ MultipleResult<typename Type::value_type...> for_each_parser(Rest str, std::tupl
         (([&]() {
             auto result = std::get<Is>(parsers)(rest);
 
-            if (result.index() == ERROR) {
-                throw std::get<ERROR>(result);
+            if (result.index() == ERR) {
+                throw std::get<ERR>(result);
             } else {
                 auto success = std::get<SUCCESS>(result);
                 std::get<Is>(values) = success.value;
@@ -48,8 +48,8 @@ Parser<std::invoke_result_t<F, typename Parsers::value_type...>> apply(F&& f, Pa
         auto result = for_each_parser(rest, parserList,
             std::make_index_sequence<std::tuple_size_v<decltype(parserList)>>{});
 
-        if (result.index() == ERROR) {
-            return std::get<ERROR>(result);
+        if (result.index() == ERR) {
+            return std::get<ERR>(result);
         }
         auto success = std::get<SUCCESS>(result);
         return Success<R>{std::apply(f, success.values), success.rest};

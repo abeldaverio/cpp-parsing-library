@@ -3,6 +3,8 @@
 #include "Parser.hpp"
 #include "ParserUtils.hpp"
 #include "Json/JsonParser.hpp"
+#include <array>
+#include <functional>
 #include <cstdint>
 #include <string>
 
@@ -11,7 +13,7 @@ Parser<std::string> parseByteString() {
 }
 
 static const std::array<std::function<Parser<JsonValue>()>, 6> json_value_map =
-    {
+    {{
         []() {
           return apply([](int i) { return JsonValue(i); }, parseByte<int>());
         },
@@ -34,7 +36,7 @@ static const std::array<std::function<Parser<JsonValue>()>, 6> json_value_map =
           return apply([](JsonArray i) { return JsonValue(i); },
                        parseByteArray(parseJsonValue()));
         },
-};
+}};
 
 Parser<JsonValue> parseByteJsonValue() {
   return parseByte<std::uint8_t>() >>=

@@ -15,7 +15,7 @@ Parser<std::string> parseJsonComment() {
 }
 
 Parser<std::vector<std::string>> jsonSkip() {
-    return (parseJsonComment() || parserToString((parseCharFromList("\t\n ")).some())).many();
+    return (parseJsonComment() || parserToString((parseCharFromList("\t\n\r ")).some())).many();
 }
 
 template<typename T>
