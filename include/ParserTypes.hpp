@@ -35,7 +35,7 @@ using Result = std::variant<Success<T>, Error>;
 
 enum ResultType {
     SUCCESS = 0,
-    ERROR = 1,
+    ERR = 1,
 };
 
 template<typename ...T>
