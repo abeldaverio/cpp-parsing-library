@@ -22,7 +22,7 @@ Parser<std::string> parseStringDigitBase(std::string const &base) {
 
 Parser<std::uint64_t> parseUnsignedIntBase(std::string const &base) {
   return apply(
-      [base](std::string str) { return std::stoull(str, 0, base.size()); },
+      [base](std::string str) { return static_cast<std::uint64_t>(std::stoull(str, 0, base.size())); },
       parseStringDigitBase(base));
 }
 
