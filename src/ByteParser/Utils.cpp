@@ -30,11 +30,11 @@ static const std::array<std::function<Parser<JsonValue>()>, 6> json_value_map =
         },
         []() {
           return apply([](JsonObject i) { return JsonValue(i); },
-                       parseJsonObject());
+                       parseByteJsonObject());
         },
         []() {
           return apply([](JsonArray i) { return JsonValue(i); },
-                       parseByteArray(parseJsonValue()));
+                       parseByteArray(parseByteJsonValue()));
         },
 }};
 
